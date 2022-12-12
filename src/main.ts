@@ -1,8 +1,8 @@
 import 'colors'
 import { config } from 'dotenv'
 import { Telegraf } from 'telegraf'
+import './models/user.model'
 import { helpCommand, onGameCallbackQuery, onText, setBotCommands, startCommand } from './commands'
-import { SequelizeScopeError } from 'sequelize'
 import sequelize from './database'
 
 config()
@@ -25,6 +25,7 @@ async function start() {
   try {
     await sequelize.authenticate()
     await sequelize.sync()
+    console.log(`Successfully connected to database`.yellow.underline)
   } catch (e) {
     if (e instanceof Error) {
       console.log(e.message)
