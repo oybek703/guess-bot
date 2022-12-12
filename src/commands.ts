@@ -11,14 +11,14 @@ export async function startCommand(ctx: any) {
   if (!existingChat) {
     await UserModel.create({ chatId })
   }
-  return ctx.reply(`Hi ${first_name || ''} ${last_name || ''} 🖐. Welcome to shop bot🙂`)
+  return ctx.reply(`Hi ${first_name || ''} ${last_name || ''} 🖐. Welcome to guess bot🙂`)
 }
 
 export async function helpCommand(ctx: any) {
   const { first_name, last_name } = ctx.update.message.from
   const chatId = ctx.update.message.chat.id
   const user = await UserModel.findOne({ where: { chatId: chatId.toString() } })
-  return ctx.replyWithMarkdown(
+  return ctx.reply(
     `
 Your name is ${first_name || ''} ${last_name || ''} 🙂 
 Your results:
