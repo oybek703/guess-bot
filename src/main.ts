@@ -1,38 +1,43 @@
 import 'colors'
 import { config } from 'dotenv'
 import { Telegraf } from 'telegraf'
+import { helpCommand, onGameCallbackQuery, onText, setBotCommands, startCommand } from './commands'
+import { SequelizeScopeError } from 'sequelize'
+import sequelize from './database'
 
 config()
 
-const token = process.env.API_TOKEN
-const bot = new Telegraf(token || '')
+const bot = new Telegraf(`${process.env.BOT_TOKEN}`)
 
-bot.start(function (ctx) {
-  const { first_name, last_name } = ctx.update.message.from
-  return ctx.reply(`Hi ${first_name || ''} ${last_name || ''} 🖐. Welcome to shop bot🙂`)
-})
+// Start command
+bot.start(startCommand)
 
-bot.help(function (ctx) {
-  const { first_name, last_name } = ctx.update.message.from
-  return ctx.reply(`Your name is ${first_name || ''} ${last_name || ''}🙂`)
-})
+// Help command
+bot.help(helpCommand)
 
-bot.on('text', function (ctx) {
-  const { text } = ctx.update.message
-  return ctx.reply(`You sent me "${text}"`)
-})
+// Handle text
+bot.on('text', onText)
+
+// Game callback query
+bot.on('callback_query', onGameCallbackQuery)
 
 async function start() {
   try {
-    bot.telegram.setMyCommands([
-      { command: 'start', description: 'Start shop bot.' },
-      { command: 'help', description: 'Get your info from bot.' }
-    ])
-    bot.launch()
+    await sequelize.authenticate()
+    await sequelize.sync()
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message)
+      console.log(`Error while connecting to database: ${e.message}`.red)
+    }
+  }
+  try {
+    await setBotCommands(bot)
+    await bot.launch()
     console.log('Bot launched successfully!'.blue.underline)
   } catch (e: unknown) {
     if (e instanceof Error) {
-      throw new Error('Error while launching bot!'.red)
+      throw new Error(`Error while launching bot: ${e.message}`.red)
     }
   }
 }
