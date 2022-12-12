@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize'
-import { config } from 'dotenv'
+import getConfig from './config'
 
-config()
+getConfig()
 
 const sequelize = new Sequelize({
   dialect: 'postgres',

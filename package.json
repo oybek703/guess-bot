@@ -1,11 +1,11 @@
 {
-  "name": "shop-bot",
+  "name": "guess-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon",
+    "dev": "cross-env NODE_ENV=production nodemon",
     "start": "node dist/main.js"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.11.13",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "nodemon": "^2.0.20",
     "prettier": "2.8.1",

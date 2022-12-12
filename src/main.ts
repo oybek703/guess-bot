@@ -1,11 +1,11 @@
 import 'colors'
-import { config } from 'dotenv'
 import { Telegraf } from 'telegraf'
 import './models/user.model'
 import { helpCommand, onGameCallbackQuery, onText, setBotCommands, startCommand } from './commands'
 import sequelize from './database'
+import getConfig from './config'
 
-config()
+getConfig()
 
 const bot = new Telegraf(`${process.env.BOT_TOKEN}`)
 
